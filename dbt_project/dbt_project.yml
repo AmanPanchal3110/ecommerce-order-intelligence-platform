@@ -18,4 +18,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   ecommerce:
     bronze:
-      +materialized: table
+      +schema: 'bronze'
+    silver:
+      +schema: 'silver'
+    gold:
+      +schema: 'gold'

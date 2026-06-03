@@ -18,8 +18,8 @@
 
     
 
-    merge into ECOMMERCE.bronze.status_bronze as DBT_INTERNAL_DEST
-        using ECOMMERCE.bronze.status_bronze__dbt_tmp as DBT_INTERNAL_SOURCE
+    merge into ECOMMERCE.silver.status_silver as DBT_INTERNAL_DEST
+        using ECOMMERCE.silver.status_silver__dbt_tmp as DBT_INTERNAL_SOURCE
         on (
                     DBT_INTERNAL_SOURCE.order_id = DBT_INTERNAL_DEST.order_id
                 ) and (

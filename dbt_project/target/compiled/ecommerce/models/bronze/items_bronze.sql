@@ -16,5 +16,5 @@ FROM ecommerce.RAW.raw_order_items
 
 WHERE INGESTION_TIMESTAMP > (
     SELECT COALESCE(MAX(INGESTION_TIMESTAMP), '2000-01-01')
-    FROM ECOMMERCE.dbt.items_bronze
+    FROM ECOMMERCE.bronze.items_bronze
 )

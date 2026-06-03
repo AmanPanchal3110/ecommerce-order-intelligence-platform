@@ -12,8 +12,8 @@
 
     
 
-    merge into ECOMMERCE.bronze.payment_bronze as DBT_INTERNAL_DEST
-        using ECOMMERCE.bronze.payment_bronze__dbt_tmp as DBT_INTERNAL_SOURCE
+    merge into ECOMMERCE.silver.payment_silver as DBT_INTERNAL_DEST
+        using ECOMMERCE.silver.payment_silver__dbt_tmp as DBT_INTERNAL_SOURCE
         on (
                     DBT_INTERNAL_SOURCE.payment_id = DBT_INTERNAL_DEST.payment_id
                 )

@@ -1,13 +1,9 @@
-{{config(
-    materialized = 'incremental',
-    unique_key = ['payment_id'],
-    incremental_strategy = 'merge'
-)}}
+
 WITH silver_amount AS (
     SELECT 
         order_id, 
         MAX(total_amount) AS total_amount
-    FROM {{ ref('items_bronze') }}
+    FROM ECOMMERCE.bronze.items_bronze
     GROUP BY order_id
 ),
 payments AS (
@@ -32,13 +28,13 @@ payments AS (
             event_type,
             LEAST(TO_TIMESTAMP_NTZ(event_timestamp), TO_TIMESTAMP_NTZ(ingestion_timestamp)) AS event_timestamp,
             ingestion_timestamp
-        FROM {{ref('payment_bronze') }}
-        {% if is_incremental() %}
+        FROM ECOMMERCE.bronze.payment_bronze
+        
         WHERE INGESTION_TIMESTAMP > (
             SELECT COALESCE(MAX(INGESTION_TIMESTAMP), '2000-01-01')
-            FROM {{ this }}
+            FROM ECOMMERCE.silver.payment_silver
         )
-        {% endif %}
+        
 )
 SELECT
     p.event_id,

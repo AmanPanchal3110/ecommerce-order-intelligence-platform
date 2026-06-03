@@ -14,3 +14,8 @@ SELECT event_id,
     event_timestamp,
     ingestion_timestamp
 FROM ecommerce.RAW.raw_payments
+
+WHERE INGESTION_TIMESTAMP > (
+    SELECT COALESCE(MAX(INGESTION_TIMESTAMP), '2000-01-01')
+    FROM ECOMMERCE.bronze.payment_bronze
+)
