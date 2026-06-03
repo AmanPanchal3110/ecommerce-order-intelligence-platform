@@ -1,0 +1,114 @@
+version: 2
+
+models:
+  - name: items_bronze
+    description: "This table contains raw order items data in incremental merge mode."
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: price
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: event_timestamp
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "<= current_timestamp()"
+
+  - name: status_bronze
+    description: "This table contains raw order status data in incremental merge mode."
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: order_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["CREATED", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"]
+      - name: payment_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["PENDING", "SUCCESS", "FAILED"]
+      - name: status_timestamp
+        tests:
+          - not_null
+      - name: event_timestamp
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "<= current_timestamp()"
+
+  - name: payment_bronze
+    description: "This table contains raw payment data in incremental merge mode."
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: payment_id
+        tests:
+          - not_null
+          - unique
+      - name: payment_method
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["UPI", "CARD", "NETBANKING", "COD"]
+      - name: payment_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["PREPAID", "COD"]
+      - name: amount
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: event_timestamp
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "<= current_timestamp()"
+
+  - name: return_bronze
+    description: "This table contains raw return data in incremental merge mode."
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: return_id
+        tests:
+          - not_null
+          - unique
+      - name: return_reason
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["DAMAGED", "WRONG_ITEM", "NO_LONGER_NEEDED"]
+      - name: return_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["INITIATED", "APPROVED", "REJECTED"]
+      - name: refund_amount
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: event_timestamp
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "<= current_timestamp()"
