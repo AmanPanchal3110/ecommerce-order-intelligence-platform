@@ -1,0 +1,12 @@
+# models/staging/sources.yml
+version: 2
+
+sources:
+  - name: raw
+    database: ecommerce    # your Snowflake database name
+    schema: RAW                # schema where Spark writes raw data
+    tables:
+      - name: raw_returns
+      - name: raw_order_items
+      - name: raw_payments
+      - name: raw_order_status

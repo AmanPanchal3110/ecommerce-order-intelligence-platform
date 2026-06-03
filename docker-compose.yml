@@ -310,5 +310,23 @@ services:
       - ./apps:/opt/spark-apps
       - ./data:/opt/spark-data
 
+  #dbt 
+  dbt:
+    build:
+      context: .
+      dockerfile: Dockerfile.dbt
+    container_name: dbt_core
+    networks:
+      - kafka-spark-net
+    volumes:
+      - ./dbt_project:/usr/app/dbt
+      - ./dbt_project/.dbt:/root/.dbt
+    working_dir: /usr/app/dbt
+    environment:
+      - DBT_PROFILES_DIR=/root/.dbt
+    depends_on:
+      - airflow-apiserver 
+   
+
 volumes:
   postgres-db-volume:
