@@ -1,8 +1,4 @@
-{{ config(
-    materialized = 'incremental',
-    unique_key = ['order_id', 'order_status','status_timestamp'],
-    incremental_strategy = 'merge'
-) }}
+
 
 SELECT
     event_id,
@@ -13,11 +9,10 @@ SELECT
     order_status,
     payment_status,
     status_timestamp
-FROM {{ref('status_bronze') }}
+FROM ECOMMERCE.bronze.status_bronze
 
-{% if is_incremental() %}
+
 WHERE INGESTION_TIMESTAMP > (
     SELECT COALESCE(MAX(INGESTION_TIMESTAMP), '2000-01-01')
-    FROM {{ this }}
+    FROM ECOMMERCE.silver.status_silver
 )
-{% endif %}

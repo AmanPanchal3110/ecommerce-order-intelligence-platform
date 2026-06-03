@@ -12,8 +12,8 @@
 
     
 
-    merge into ECOMMERCE.bronze.return_bronze as DBT_INTERNAL_DEST
-        using ECOMMERCE.bronze.return_bronze__dbt_tmp as DBT_INTERNAL_SOURCE
+    merge into ECOMMERCE.silver.return_silver as DBT_INTERNAL_DEST
+        using ECOMMERCE.silver.return_silver__dbt_tmp as DBT_INTERNAL_SOURCE
         on (
                     DBT_INTERNAL_SOURCE.return_id = DBT_INTERNAL_DEST.return_id
                 )

@@ -8,11 +8,11 @@ SELECT event_id,
     refund_amount,
     currency,
     event_type,
-    event_timestamp,
+    LEAST(TO_TIMESTAMP_NTZ(event_timestamp), TO_TIMESTAMP_NTZ(ingestion_timestamp)) AS event_timestamp,
     ingestion_timestamp
-FROM ecommerce.RAW.raw_returns
+FROM ECOMMERCE.bronze.return_bronze
 
 WHERE INGESTION_TIMESTAMP > (
     SELECT COALESCE(MAX(INGESTION_TIMESTAMP), '2000-01-01')
-    FROM ECOMMERCE.bronze.return_bronze
+    FROM ECOMMERCE.silver.return_silver
 )

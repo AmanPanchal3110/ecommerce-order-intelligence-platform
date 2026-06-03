@@ -1,8 +1,4 @@
-{{config(
-    materialized='incremental',
-    unique_key=['order_id','product_id'],
-    incremental_strategy  = 'merge'
-)}}
+
 SELECT event_id,
     order_id,
     customer_id,
@@ -17,10 +13,9 @@ SELECT event_id,
     currency,
     LEAST(TO_TIMESTAMP_NTZ(event_timestamp), TO_TIMESTAMP_NTZ(ingestion_timestamp)) AS event_timestamp,
     ingestion_timestamp
-FROM {{ref('items_bronze')}}
-{% if is_incremental() %}
+FROM ECOMMERCE.bronze.items_bronze
+
 WHERE INGESTION_TIMESTAMP > (
     SELECT COALESCE(MAX(INGESTION_TIMESTAMP), '2000-01-01')
-    FROM {{ this }}
+    FROM ECOMMERCE.silver.item_silver
 )
-{% endif %}

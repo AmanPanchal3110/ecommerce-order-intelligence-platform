@@ -1,0 +1,11 @@
+{{ config(materialized = 'table') }}
+
+SELECT
+    payment_type,
+    COUNT(DISTINCT order_id) AS total_orders,
+    COUNT(DISTINCT CASE WHEN current_order_status = 'CANCELLED' THEN order_id END) AS cancelled_orders,
+    COUNT(DISTINCT CASE WHEN current_order_status = 'CANCELLED' THEN order_id END) * 100.0
+        / NULLIF(COUNT(DISTINCT order_id), 0) AS cancellation_rate
+FROM {{ ref('obt') }}
+GROUP BY payment_type
+ORDER BY payment_type
