@@ -1,5 +1,0 @@
-
-SELECT * 
-FROM ecommerce.RAW.raw_returns
-
-WHERE INGESTION_TIMESTAMP > (SELECT MAX(INGESTION_TIMESTAMP) FROM ECOMMERCE.dbt.bronze_returns)
