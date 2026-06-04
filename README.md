@@ -204,7 +204,7 @@ This continuously emits:
 
 Once the producer is running, open Kafka UI at `http://localhost:9090` → Topics → `order_event` → Messages to see live events flowing in:
 
-![Kafka UI Messages](assets/screenshots/kafka_ui_messages.png)
+![Kafka UI Messages](assets/screenshots/Kafka_ui_messages.png)
 
 ---
 
