@@ -1,0 +1,5 @@
+
+SELECT * 
+FROM ecommerce.RAW.raw_order_status
+
+WHERE INGESTION_TIMESTAMP > (SELECT MAX(INGESTION_TIMESTAMP) FROM ECOMMERCE.dbt.bronze_order_status)

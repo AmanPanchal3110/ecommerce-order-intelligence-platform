@@ -1,0 +1,37 @@
+-- back compat for old kwarg name
+  
+  begin;
+    
+        
+            
+                
+                
+            
+                
+                
+            
+        
+    
+
+    
+
+    merge into ECOMMERCE.bronze.items_bronze as DBT_INTERNAL_DEST
+        using ECOMMERCE.bronze.items_bronze__dbt_tmp as DBT_INTERNAL_SOURCE
+        on (
+                    DBT_INTERNAL_SOURCE.order_id = DBT_INTERNAL_DEST.order_id
+                ) and (
+                    DBT_INTERNAL_SOURCE.product_id = DBT_INTERNAL_DEST.product_id
+                )
+
+    
+    when matched then update set
+        "EVENT_ID" = DBT_INTERNAL_SOURCE."EVENT_ID","ORDER_ID" = DBT_INTERNAL_SOURCE."ORDER_ID","CUSTOMER_ID" = DBT_INTERNAL_SOURCE."CUSTOMER_ID","CUSTOMER_NAME" = DBT_INTERNAL_SOURCE."CUSTOMER_NAME","CUSTOMER_EMAIL" = DBT_INTERNAL_SOURCE."CUSTOMER_EMAIL","PRODUCT_ID" = DBT_INTERNAL_SOURCE."PRODUCT_ID","QUANTITY" = DBT_INTERNAL_SOURCE."QUANTITY","PRICE" = DBT_INTERNAL_SOURCE."PRICE","TOTAL_AMOUNT" = DBT_INTERNAL_SOURCE."TOTAL_AMOUNT","PAYMENT_TYPE" = DBT_INTERNAL_SOURCE."PAYMENT_TYPE","CURRENCY" = DBT_INTERNAL_SOURCE."CURRENCY","EVENT_TIMESTAMP" = DBT_INTERNAL_SOURCE."EVENT_TIMESTAMP","INGESTION_TIMESTAMP" = DBT_INTERNAL_SOURCE."INGESTION_TIMESTAMP"
+    
+
+    when not matched then insert
+        ("EVENT_ID", "ORDER_ID", "CUSTOMER_ID", "CUSTOMER_NAME", "CUSTOMER_EMAIL", "PRODUCT_ID", "QUANTITY", "PRICE", "TOTAL_AMOUNT", "PAYMENT_TYPE", "CURRENCY", "EVENT_TIMESTAMP", "INGESTION_TIMESTAMP")
+    values
+        ("EVENT_ID", "ORDER_ID", "CUSTOMER_ID", "CUSTOMER_NAME", "CUSTOMER_EMAIL", "PRODUCT_ID", "QUANTITY", "PRICE", "TOTAL_AMOUNT", "PAYMENT_TYPE", "CURRENCY", "EVENT_TIMESTAMP", "INGESTION_TIMESTAMP")
+
+;
+    commit;
